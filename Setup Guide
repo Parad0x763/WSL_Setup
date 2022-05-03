@@ -1,0 +1,41 @@
+First step is to install wsl by using this command in PowerShell: 
+  wsl --install
+I'd reccommend using the Windows Terminal which comes preinstalled on Windows 11 but if can be installed via the Windows Store on Windows 10
+
+Next you will need to set up your user info, a username and a password. The username should be in all lowercase.
+You may need to install Ubuntu through the Microsoft Store, just search Ubuntu in the store and download your version of choice.
+
+Some useful commands:
+  wsl -l --running //shows what distro(s) is running
+  wsl --shutdown //to shutdown the virtual machine
+  wsl --update //to update wsl
+  
+Once wsl is installed and updated and you have Ubuntu installed, you can launch into ubuntu by opening PowerShell and typing 'ubuntu' and hittng enter
+You can also set up GUI applications in wsl, but that can take some more set up, though you can install applications through the ubuntu bash terminal
+and then launch those applications via the command line as you would in a Linux distro
+
+For setting up an actual GUI environment for Ubuntu: (Run these commands via Ubuntu)
+  
+  First: sudo apt update && sudo apt -y upgrade
+  
+  Next: sudo apt-get install -y kubuntu-desktop  You will be prompted with a screen just hit ok, 
+    then on the next screen: Configuring sddm, select 'lightdm', this may take a while just let it finish running
+  
+  Then run these commands:
+    sudo apt-get install xrdp
+    sudo cp /etc/xrdp/xrdp.ini /etc/xrdp/xrdp.ini.bak
+    sudo sed -i 's/3389/3390/g' /etc/xrdp/xrdp.ini
+    sudo sed -i 's/max_bpp=32/#max_bpp=32\nmax_bpp=128/g' /etc/xrdp/xrdp.ini
+    sudo sed -i 's/xserverbpp=24/#xserverbpp=24\nxserverbpp=128/g' /etc/xrdp/xrdp.ini
+  
+  Lastly: enable Dbus:
+    #enable dbus
+    sudo systemctl enable dbus
+    sudo /etc/init.d/dbus start
+    sudo /etc/init.d/xrdp start
+    # check xrdp status
+    sudo /etc/init.d/xrdp status
+    
+ Now launch into a Remote Desktop Connection, search Remote in the start menu, and under the Computer: section enter
+    localhost:3390
+ once connected input your username and password created earlier and you should be running an Ubuntu desktop in Windows via WSL!
